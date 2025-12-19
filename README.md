@@ -4,6 +4,8 @@ Prometheus exporter for lnd (https://github.com/lightningnetwork/lnd)
 
 [Docker Hub](https://hub.docker.com/r/lnliz/prometheus-lnd-exporter/tags)
 
+Exposes metrics on port :9113
+
 ### run it
 
 build
