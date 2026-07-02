@@ -2,14 +2,14 @@ package main
 
 import (
 	"context"
+	"encoding/hex"
 	"log"
 	"os"
 	"strconv"
 	"sync"
 	"time"
 
-	"github.com/lightningnetwork/lnd/lnrpc"
-	"github.com/lightningnetwork/lnd/macaroons"
+	"github.com/lnliz/prometheus-lnd-exporter/lnrpc"
 	"github.com/prometheus/client_golang/prometheus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -98,6 +98,25 @@ func boolToFloat(b bool) float64 {
 	}
 }
 
+type macaroonCredential struct {
+	*macaroon.Macaroon
+}
+
+func (m macaroonCredential) GetRequestMetadata(context.Context, ...string) (map[string]string, error) {
+	macBytes, err := m.MarshalBinary()
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]string{
+		"macaroon": hex.EncodeToString(macBytes),
+	}, nil
+}
+
+func (m macaroonCredential) RequireTransportSecurity() bool {
+	return true
+}
+
 func getGrpcClient(rpcAddr string, tlsCertPath string, macaroonPath string) (*grpc.ClientConn, error) {
 	tlsCreds, err := credentials.NewClientTLSFromFile(tlsCertPath, "")
 	if err != nil {
@@ -117,14 +136,9 @@ func getGrpcClient(rpcAddr string, tlsCertPath string, macaroonPath string) (*gr
 		return nil, err
 	}
 
-	macOpts, err := macaroons.NewMacaroonCredential(mac)
-	if err != nil {
-		return nil, err
-	}
-
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(tlsCreds),
-		grpc.WithPerRPCCredentials(macOpts),
+		grpc.WithPerRPCCredentials(macaroonCredential{Macaroon: mac}),
 		grpc.WithDefaultCallOptions(maxMsgRecvSize),
 	}
 
