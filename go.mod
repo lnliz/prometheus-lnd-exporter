@@ -6,7 +6,7 @@ replace google.golang.org/protobuf => github.com/lightninglabs/protobuf-go-hex-d
 
 require (
 	github.com/prometheus/client_golang v1.23.2
-	google.golang.org/grpc v1.83.1
+	google.golang.org/grpc v1.83.2
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/macaroon.v2 v2.1.0
 )
@@ -25,9 +25,9 @@ require (
 	github.com/prometheus/procfs v0.20.1 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
-	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/net v0.55.0 // indirect
-	golang.org/x/sys v0.45.0 // indirect
-	golang.org/x/text v0.37.0 // indirect
+	golang.org/x/crypto v0.55.0 // indirect
+	golang.org/x/net v0.58.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 )
